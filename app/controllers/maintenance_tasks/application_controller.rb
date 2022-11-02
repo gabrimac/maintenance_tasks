@@ -23,6 +23,8 @@ module MaintenanceTasks
     before_action do
       request.content_security_policy_nonce_generator ||= ->(_request) { SecureRandom.base64(16) }
       request.content_security_policy_nonce_directives = ["style-src"]
+
+      ActsAsTenant.current_tenant = request.env['rack.session'].to_h['current_company']
     end
 
     protect_from_forgery with: :exception
